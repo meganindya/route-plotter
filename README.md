@@ -1,4 +1,13 @@
-# maze-bot
- Bot traversing shortest path in a walled maze
+# Route Plotter
 
-```This project was not made using version control. Hence, the existing source code has several redundant files with small differences. I'm working on structuring and refactoring the existing source code, and adding comments and documentation.```
+Plots the shortest path between a starting-point and an ending point in a walled map.
+
+## Images
+
+### Input
+
+![input](./sample/input.jpg)
+
+### Output
+
+![output](./sample/output.jpg)
