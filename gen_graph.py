@@ -10,17 +10,6 @@ from skimage.util import invert
 import sknw
 
 
-def main():
-    img = cv2.imread("temp/solidified.jpg")
-    img = cv2.resize(img, (400, 400), interpolation = cv2.INTER_AREA)
-    img = invert(img)
-    #cv2.imshow("dfd", img)
-    org = cv2.imread('../mazes/maze-2.jpg')
-    org = cv2.resize(org, (400, 400), interpolation = cv2.INTER_AREA)
-    skel = make_skeleton(img)
-    graph = make_graph(skel, img, org)
-    plot_graph(graph, org)
-    
 def make_skeleton(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         #BınaryThreshold + OtsuThreshold + BinaryThreshold
@@ -108,6 +97,17 @@ def color_coordinate(image, lb, ub):
     moments = [cv2.moments(cnt) for cnt in contours]
     centroids = [(int(M['m10'] / M['m00']), int(M['m01'] / M['m00'])) for M in moments]
     return centroids[0]
+
+def main():
+    img = cv2.imread("temp/solidified.jpg")
+    img = cv2.resize(img, (400, 400), interpolation = cv2.INTER_AREA)
+    img = invert(img)
+    #cv2.imshow("dfd", img)
+    org = cv2.imread('../mazes/maze-2.jpg')
+    org = cv2.resize(org, (400, 400), interpolation = cv2.INTER_AREA)
+    skel = make_skeleton(img)
+    graph = make_graph(skel, img, org)
+    plot_graph(graph, org)
 
 if __name__ == "__main__":
     main()

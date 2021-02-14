@@ -8,31 +8,8 @@ import matplotlib.pyplot as plt
 from skimage.util import invert
 import os
 
+
 G = ''
-def main():
-    img = cv2.imread('../mazes/maze-2.jpg')
-    img = cv2.resize(img, (400, 400), interpolation = cv2.INTER_AREA)
-    with open('temp/path', 'rb') as fp:
-        path = pickle.load(fp)
-    global G
-    G = nx.read_gpickle("temp/graph.gpickle")
-    #ims = load_images('dtest')
-
-    b_lb = np.array([110,50,50])
-    b_ub = np.array([130,255,255])
-
-    y_lb = np.array([20, 100, 100])
-    y_ub = np.array([30, 255, 255])
-
-    c_b = c_center(img, b_lb, b_ub)
-    c_y = c_center(img, y_lb, y_ub)
-    length = dist(c_b, c_y) * 2 
-
-    end = len(G.nodes()) - 1
-    path_r = path_red(length, end, path)
-    for i in path_r:    print(i)
-
-    draw_map(img, end, path, path_r, c_b, c_y)
 
 def n_node(n):
     return G.node[n]['pts'][0]
@@ -96,6 +73,30 @@ def c_center(image, lb, ub):
     centroids = [(int(M['m10'] / M['m00']), int(M['m01'] / M['m00'])) for M in moments]
     return centroids[0]
 
+def main():
+    img = cv2.imread('../mazes/maze-2.jpg')
+    img = cv2.resize(img, (400, 400), interpolation = cv2.INTER_AREA)
+    with open('temp/path', 'rb') as fp:
+        path = pickle.load(fp)
+    global G
+    G = nx.read_gpickle("temp/graph.gpickle")
+    #ims = load_images('dtest')
+
+    b_lb = np.array([110,50,50])
+    b_ub = np.array([130,255,255])
+
+    y_lb = np.array([20, 100, 100])
+    y_ub = np.array([30, 255, 255])
+
+    c_b = c_center(img, b_lb, b_ub)
+    c_y = c_center(img, y_lb, y_ub)
+    length = dist(c_b, c_y) * 2 
+
+    end = len(G.nodes()) - 1
+    path_r = path_red(length, end, path)
+    for i in path_r:    print(i)
+
+    draw_map(img, end, path, path_r, c_b, c_y)
 
 if __name__ == "__main__":
     main()

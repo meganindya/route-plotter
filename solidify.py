@@ -5,11 +5,6 @@ from skimage.util import invert
 
 
 img = []
-def main():
-    img = cv2.imread("../mazes/maze-2.jpg")
-    #img = cv2.resize(img, (400, 400), interpolation = cv2.INTER_AREA)
-    img = reds_to_cyan(img)
-    solidify(img)
 
 def reds_to_cyan(image):
         #Convert BGR to HSV
@@ -61,6 +56,12 @@ def solidify(image, flag = 1):
     kernel = np.ones((3,3),np.uint8)
     image = cv2.dilate(image, kernel, iterations = 1)
     solidify(image, flag + 1)
+
+def main():
+    img = cv2.imread("../mazes/maze-2.jpg")
+    #img = cv2.resize(img, (400, 400), interpolation = cv2.INTER_AREA)
+    img = reds_to_cyan(img)
+    solidify(img)
 
 if __name__ == "__main__":
     main()

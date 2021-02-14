@@ -5,7 +5,34 @@ import networkx as nx
 from queue import PriorityQueue
 import pickle
 
+
 #G = ''
+
+def heuristic(G, a, b):
+       # Manhattan distance on a square grid
+   a, b = G.node[a]['pts'][0], G.node[b]['pts'][0]
+   return abs(a[1] - b[1]) + abs(a[0] - b[0])
+
+def find_sh_path(G, start, goal):
+    frontier = PriorityQueue()
+    frontier.put(start, 0)
+    came_from = {}
+    cost_so_far = {}
+    came_from[start] = None
+    cost_so_far[start] = 0
+    
+    while not frontier.empty():
+       current = frontier.get()
+       if current == goal:      break
+       for next in G.neighbors(current):
+          new_cost = cost_so_far[current] + G[current][next]['weight']
+          if next not in cost_so_far or new_cost < cost_so_far[next]:
+             cost_so_far[next] = new_cost
+             priority = new_cost + heuristic(G, goal, next)
+             frontier.put(next, priority)
+             came_from[next] = current
+    return came_from
+
 def main():
     #global G
     G = nx.read_gpickle("temp/graph.gpickle")
@@ -42,31 +69,6 @@ def main():
 
     with open('temp/path', 'wb') as fp:
         pickle.dump(path, fp)
-
-def heuristic(G, a, b):
-       # Manhattan distance on a square grid
-   a, b = G.node[a]['pts'][0], G.node[b]['pts'][0]
-   return abs(a[1] - b[1]) + abs(a[0] - b[0])
-
-def find_sh_path(G, start, goal):
-    frontier = PriorityQueue()
-    frontier.put(start, 0)
-    came_from = {}
-    cost_so_far = {}
-    came_from[start] = None
-    cost_so_far[start] = 0
-    
-    while not frontier.empty():
-       current = frontier.get()
-       if current == goal:      break
-       for next in G.neighbors(current):
-          new_cost = cost_so_far[current] + G[current][next]['weight']
-          if next not in cost_so_far or new_cost < cost_so_far[next]:
-             cost_so_far[next] = new_cost
-             priority = new_cost + heuristic(G, goal, next)
-             frontier.put(next, priority)
-             came_from[next] = current
-    return came_from
 
 if __name__ == "__main__":
     main()
